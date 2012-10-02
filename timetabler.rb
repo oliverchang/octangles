@@ -1,4 +1,4 @@
-require './course.rb'
+require './course'
 
 # A timetable is an array of Activities
 module Timetabler
