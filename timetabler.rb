@@ -8,11 +8,12 @@ module Timetabler
     timetables = [] 
     required = []
 
+    # required is an array of activity sections
     courses.each do |c|
       required += c.activities.values
     end
 
-    generateAux required, 0, [], 0 do |t|
+    generateAux required, 0, [], allowed_clash do |t|
       timetables << t.clone
     end
 
@@ -27,44 +28,57 @@ module Timetabler
     end
 
     activities[index].each do |a|
-      if fits(timetable, a, clash)
+      f, c = fits(timetable, a, clash)
+      if f
         timetable << a
-        generateAux(activities, index+1, timetable, &block)
+        generateAux(activities, index+1, timetable, clash-c, &block)
         timetable.pop
       end
     end
   end
 
+  # returns [true|false, number of clash hours used]
   def Timetabler.fits(timetable, activity, clash=0)
+    current_clash = 0
+
     timetable.each do |a|
       a.times.each do |t1|
         activity.times.each do |t2|
-          if clash(t1, t2)
-            return false
+          c = clash(t1, t2)
+          if current_clash+c <= clash
+            current_clash += c
+          else
+            return false, 0
           end
         end
       end
     end
 
-    return true
+    return true, current_clash
   end
 
+  # returns the number of clash hours
   def Timetabler.clash(t1, t2)
     if t1[0] == t2[0]
       # if the timeslot that starts later
       # starts before the other one ends,
       # there is a clash
+      # TODO: clean this shit up
       if t1[1] >= t2[1] 
         if t1[1] < t2[2]
-          return true
+          c = t2[2] - t1[1]
+          c -= (t2[2]-t1[2]) if t1[2] < t2[2]
+          return c
         end
       else
         if t2[1] < t1[2]
-          return true
+          c = t1[2] - t2[1]
+          c -= (t1[2]-t2[2]) if t2[2] < t1[2]
+          return c
         end
       end
     end
 
-    return false
+    return 0
   end
 end
