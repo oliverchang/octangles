@@ -78,7 +78,7 @@ module Timetabler
       result += "</table>\n"
     end
 
-    def to_a
+    def to_s
       to_html
     end
 
@@ -110,6 +110,7 @@ module Timetabler
       start_times = [24]*5
       end_times = [0]*5
 
+      # find the start/end times for each day
       self.each do |a|
         a.times.each do |t|
           if t[1] < start_times[t[0]]
@@ -117,7 +118,7 @@ module Timetabler
           end
 
           if t[2] > end_times[t[0]]
-          end_times[t[0]] = t[2]
+            end_times[t[0]] = t[2]
           end
         end
       end
@@ -174,6 +175,11 @@ module Timetabler
                                                y.days_at_uni}
       when 'hours' then timetables.sort!{|x,y| x.hours_at_uni <=>
                                                 y.hours_at_uni} 
+      when 'start_time' then timetables.sort!{|x,y| y.earliest_start_time <=> 
+                                                      x.earliest_start_time}
+
+      when 'end_time' then timetables.sort!{|x,y| x.latest_end_time <=> 
+                                                    y.latest_end_time}
       end
     end
   
