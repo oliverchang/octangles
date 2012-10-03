@@ -4,6 +4,7 @@ require './timetabler'
 configure do 
   set :sort_options, {'days' => 'Least days at uni',
                       'hours' => 'Least hours at uni',
+                      'sleep_in_time' => 'Sleep in time',
                       'start_time' => 'Latest start time',
                       'end_time' => 'Earliest end time'}
 end

@@ -151,6 +151,26 @@ module Timetabler
 
       return (@days_at_uni = days)
     end
+
+    def sleep_in_time
+      return @sleep_in_time if @sleep_in_time
+      sleep_in = 0
+
+      earliest = [24]*5
+      self.each do |a|
+        a.times.each do |t|
+          earliest[t[0]] = [earliest[t[0]], t[1]].min
+        end
+      end
+    
+      earliest.each do |t|
+        if t < 24
+          sleep_in += t
+        end
+      end
+
+      return (@sleep_in_time = sleep_in)
+    end
   end
 
   def Timetabler.generate(courses=[], options={})
@@ -181,6 +201,7 @@ module Timetabler
         when 'hours' then i = 0; timetables.sort_by!{|x| [x.hours_at_uni, i+=1]}
         when 'start_time' then i = 0; timetables.sort_by!{|x| [-x.earliest_start_time, i+=1]}
         when 'end_time' then i = 0; timetables.sort_by!{|x| [x.latest_end_time, i+=1]}
+        when 'sleep_in_time' then i = 0; timetables.sort_by!{|x| [-x.sleep_in_time, i+=1]}
         end
       end
     end
