@@ -1,0 +1,27 @@
+<div class="container">
+   <div class="page-header">
+      <h1>Octangles</h1>
+      <small>Timetable generator for 2013 Semester 1</small>
+   </div>
+   <form method="POST" action="/generate">
+      <label>Courses</label>
+      <input class="span6" type="text" placeholder="Courses, separated by commas" name="courses" value="<%= @input_courses %>"/>
+      <label>Allowed clash hours</label>
+      <input class="span4" type="text" placeholder="Maximum of 3" name="clash" value="<%= @input_clash %>"/>
+
+      <br />
+      <input type="submit" value="Generate" class="btn" />
+   </form>
+
+   <% if @timetables.size > 0 %>
+      <p><%= @timetables.size %> timetables generated.</p>
+   <% elsif @input_courses != '' %>
+      <p>No valid timetables found.</p>
+   <% end %>
+
+   <% if @timetables %>
+      <% @timetables.each do |t| %>   
+         <%= t.to_html %>
+      <% end %>
+   <% end %>
+</div>
