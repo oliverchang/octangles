@@ -83,6 +83,8 @@ module Timetabler
     end
 
     def earliest_start_time
+      return @earliest_start_time if @earlist_start_time
+
       earliest = 24
       self.each do |a|
         a.times.each do |t|
@@ -90,10 +92,11 @@ module Timetabler
         end
       end
 
-      return earliest
+      return (@earlest_start_time = earliest)
     end
 
     def latest_end_time
+      return @latest_end_time if @latest_end_time
       latest = 6
 
       self.each do |a|
@@ -102,10 +105,11 @@ module Timetabler
         end
       end
 
-      return latest
+      return (@latest_end_time = latest)
     end
 
     def hours_at_uni
+      return @hours_at_uni if @hours_at_uni
       hours = 0
       start_times = [24]*5
       end_times = [0]*5
@@ -129,10 +133,11 @@ module Timetabler
         end
       end
 
-      return hours
+      return (@hours_at_uni = hours)
     end
 
     def days_at_uni
+      return @days_at_uni if @days_at_uni
       days = 0
       seen = {}
       self.each do |a|
@@ -144,7 +149,7 @@ module Timetabler
         end
       end
 
-      return days
+      return (@days_at_uni = days)
     end
   end
 
