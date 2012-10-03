@@ -159,14 +159,9 @@ module Timetabler
 
     options[:clash] ||= 0
 
+    @@num_generated = 0
     generateAux(required, 0, Timetable.new, options[:clash]) do |t|
       timetables << t.clone
-    end
-
-    timetables.each do |t|
-      puts ""
-      puts t.to_html
-      puts ""
     end
 
     if options[:sort_by]
@@ -177,7 +172,6 @@ module Timetabler
                                                 y.hours_at_uni} 
       when 'start_time' then timetables.sort!{|x,y| y.earliest_start_time <=> 
                                                       x.earliest_start_time}
-
       when 'end_time' then timetables.sort!{|x,y| x.latest_end_time <=> 
                                                     y.latest_end_time}
       end
@@ -188,7 +182,12 @@ module Timetabler
 
   private 
   def Timetabler.generateAux(activities, index, timetable, clash=0, &block)
+    if @@num_generated >= MAX_TIMETABLES
+      return
+    end
+
     if index >= activities.size
+      @@num_generated += 1
       block.call(timetable)
       return
     end
