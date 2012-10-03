@@ -165,15 +165,17 @@ module Timetabler
     end
 
     if options[:sort_by]
-      case options[:sort_by]
-      when 'days' then timetables.sort!{|x,y| x.days_at_uni <=> 
-                                               y.days_at_uni}
-      when 'hours' then timetables.sort!{|x,y| x.hours_at_uni <=>
-                                                y.hours_at_uni} 
-      when 'start_time' then timetables.sort!{|x,y| y.earliest_start_time <=> 
-                                                      x.earliest_start_time}
-      when 'end_time' then timetables.sort!{|x,y| x.latest_end_time <=> 
-                                                    y.latest_end_time}
+      options[:sort_by].split(', ').reverse.each do |s|
+        case s
+        when 'days' then timetables.sort!{|x,y| x.days_at_uni <=> 
+                                                 y.days_at_uni}
+        when 'hours' then timetables.sort!{|x,y| x.hours_at_uni <=>
+                                                  y.hours_at_uni} 
+        when 'start_time' then timetables.sort!{|x,y| y.earliest_start_time <=> 
+                                                        x.earliest_start_time}
+        when 'end_time' then timetables.sort!{|x,y| x.latest_end_time <=> 
+                                                      y.latest_end_time}
+        end
       end
     end
   

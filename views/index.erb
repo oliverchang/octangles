@@ -1,7 +1,7 @@
 <div class="container">
    <div class="page-header">
       <h1>Octangles</h1>
-      <small>Timetable generator for 2013 Semester 1</small>
+      <small>UNSW timetable generator for 2013 Semester 1</small>
    </div>
    <form method="POST" action="/">
       <label>Courses</label>
@@ -10,13 +10,15 @@
       <label>Allowed clash hours</label>
       <input class="span4" type="text" placeholder="Maximum of 3" name="clash" value="<%= @clash %>"/>
 
-      <label>Sort timetables by</label>
+      <label>Sort timetables by <small>(select in order from most important to least) <a id="sort_reset">reset</a> </small></label>
       <% @sort_options.keys.each do |s| %>
-         <label class="radio">
-         <input type="radio" name="sort_by" value="<%= s %>" <% if @sort_by == s %> checked <% end %> />
+         <label class="checkbox">
+         <input class="sort_by" type="checkbox" name="sort_by" value="<%= s %>" <% if @sort_by == s %> checked <% end %> />
             <%= @sort_options[s] %>
          </label>
       <% end %>
+
+      <input id="sort_by_ordered" class="span5" type="text" name="sort_by_ordered" readonly="readonly"/><br />
 
       <input type="submit" value="Generate" class="btn" />
    </form>
