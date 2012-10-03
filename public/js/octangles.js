@@ -1,9 +1,9 @@
 $(document).ready(function() {
-   $('#sort_by_ordered').hide();
+   $('#sort_div').hide();
 
    $('.sort_by').click(function() {
       $(this).attr("disabled", "disabled");
-      $('#sort_by_ordered').show();
+      $('#sort_div').show();
 
       var val = $('#sort_by_ordered').val();
       if (val != "") {
@@ -15,6 +15,7 @@ $(document).ready(function() {
 
    $('#sort_reset').click(function() {
       $('.sort_by').removeAttr("disabled").prop("checked", false);
-      $('#sort_by_ordered').hide().val('');
+      $('#sort_div').hide();
+      $('sort_by_ordered').val('');
    });
 });
