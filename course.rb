@@ -42,7 +42,11 @@ class Course
   private 
   def get_activities
     activities = {}
-    doc = Nokogiri::HTML(open(TIMETABLE_URI+@name+'.html')) 
+    begin
+      doc = Nokogiri::HTML(open(TIMETABLE_URI+@name+'.html')) 
+    rescue
+      return {}
+    end
 
     doc.css('td.sectionSubHeading').each do |period|
       if period.content == TEACHING_PERIOD
