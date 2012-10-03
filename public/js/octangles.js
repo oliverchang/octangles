@@ -16,6 +16,6 @@ $(document).ready(function() {
    $('#sort_reset').click(function() {
       $('.sort_by').removeAttr("disabled").prop("checked", false);
       $('#sort_div').hide();
-      $('sort_by_ordered').val('');
+      $('#sort_by_ordered').val('');
    });
 });
