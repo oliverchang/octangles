@@ -8,8 +8,8 @@ module Timetabler
     def to_html
       timetable = []
 
-      headings = ['Hour', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri']
-      result = "<table class=\"table table-bordered\">\n"
+      headings = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+      result = "<table class=\"table table-bordered timetable\">\n"
       start = self.earliest_start_time
       finish = self.latest_end_time
 
@@ -27,11 +27,12 @@ module Timetabler
         end
       end
 
-      result += "<tr>" + headings.map{|x| "<th>"+x+"</th>"}.join('') + "</tr>\n"
+      result += "<tr><th class=\"hour\">Hour</th>"
+      result += headings.map{|x| "<th>"+x+"</th>"}.join('') + "</tr>\n"
 
       (start..finish).each do |h|
         result += "<tr>"
-        result += "<td>" + "#{h}:00" + "</td>"
+        result += "<td class=\"hour\">" + "#{h}:00" + "</td>"
 
         (0..4).each do |d|
           next if timetable[h][d] == ' '
@@ -45,11 +46,23 @@ module Timetabler
             timetable[r][d] = ' '
             rowspan += 1
           end if timetable[h][d]
+
+          # TODO make neater
+
+         if timetable[h][d] 
+           if timetable[h][d].include?(' + ')
+             cls = "clash"
+           else
+             cls = "class"
+           end
+         else
+           cls = ''
+         end
           
           if rowspan > 1
-            result += "<td rowspan=\"#{rowspan}\">"
+            result += "<td rowspan=\"#{rowspan}\" class=\"#{cls}\">"
           else
-            result += "<td>"
+            result += "<td class=\"#{cls}\">"
           end
 
           if timetable[h][d]

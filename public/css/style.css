@@ -1,0 +1,21 @@
+table.timetable {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.timetable td.class {
+  background-color:#5099CC;
+  color: #eeeeee;
+  text-align: center;
+}
+
+.timetable td.clash {
+  background-color:#CC9966;
+  color: #eeeeee;
+  text-align: center;
+}
+
+.timetable .hour {
+  width: 8%;     
+}
+
