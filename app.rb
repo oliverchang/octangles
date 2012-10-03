@@ -8,31 +8,29 @@ configure do
                       'end_time' => 'Earliest end time'}
 end
 
+helpers do
+  def get_params
+    @timetables = []
+    @input_courses = params[:courses]
+    @clash = params[:clash]
+    @sort_by = params[:sort_by]
+    @sort_options = settings.sort_options
+  end
+end
+
 get '/' do
   @title = "Octangles"
-  @timetables = []
-  @input_courses = ''
-  @clash = 0
-  @sort_by = ''
-  @sort_options = settings.sort_options
+  get_params
+
   erb :index
 end
 
-get '/generate/:courses/:clash' do
+post '/' do
   @title = "Octangles"
-  courses = params[:courses].split(',').map{|x| Course.new(x.strip)}
-  @timetables = Timetabler::generate(courses, :clash => params[:clash].to_i)
-  erb :index
-end
+  get_params
 
-post '/generate' do
-  @title = "Octangles"
-  @input_courses = params[:courses]
-  @sort_options = settings.sort_options
-  @sort_by = params[:sort_by]
-  @clash = params[:clash].to_i
-  courses = params[:courses].split(',').map{|x| Course.new(x.strip)}
-  @timetables = Timetabler::generate(courses, :clash => @clash,
+  courses = @input_courses.split(',').map{|x| Course.new(x.strip)}
+  @timetables = Timetabler::generate(courses, :clash => @clash.to_i,
                                               :sort_by => params[:sort_by])
   erb :index
 end

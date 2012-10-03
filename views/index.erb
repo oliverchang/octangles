@@ -6,8 +6,10 @@
    <form method="POST" action="/generate">
       <label>Courses</label>
       <input class="span6" type="text" placeholder="Courses, separated by commas" name="courses" value="<%= @input_courses %>"/>
+
       <label>Allowed clash hours</label>
       <input class="span4" type="text" placeholder="Maximum of 3" name="clash" value="<%= @clash %>"/>
+
       <label>Sort timetables by</label>
       <% @sort_options.keys.each do |s| %>
          <label class="radio">
@@ -15,12 +17,13 @@
             <%= @sort_options[s] %>
          </label>
       <% end %>
+
       <input type="submit" value="Generate" class="btn" />
    </form>
 
    <% if @timetables.size > 0 %>
       <p><%= @timetables.size %> timetables generated.</p>
-   <% elsif @input_courses != '' %>
+   <% elsif @input_courses %>
       <p>No valid timetables found.</p>
    <% end %>
 
