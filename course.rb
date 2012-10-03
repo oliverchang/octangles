@@ -75,6 +75,10 @@ class Course
     # Make sure the activity times are unique
     activities.values.each do |a|
       a.uniq!{|x| x.times}
+
+      # Shuffle the activities so we get
+      # different ones every time
+      a.shuffle!
     end
 
     return activities

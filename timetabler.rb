@@ -1,7 +1,7 @@
 require './course'
 
 module Timetabler
-  MAX_TIMETABLES = 2000
+  MAX_TIMETABLES = 1500
 
   # A timetable is an array of Activities
   class Timetable < Array
@@ -156,6 +156,10 @@ module Timetabler
     courses.each do |c|
       required += c.activities.values
     end
+
+    # shuffle the required activities
+    # so we get different timetables each time
+    required.shuffle!
 
     options[:clash] ||= 0
 
