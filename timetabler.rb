@@ -185,6 +185,9 @@ module Timetabler
     # shuffle the required activities
     # so we get different timetables each time
     required.shuffle!
+    required.each do |a|
+      a.shuffle!
+    end
 
     options[:clash] ||= 0
     options[:clash] = 3 if options[:clash] > 3

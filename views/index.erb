@@ -13,7 +13,7 @@
       <label>Sort timetables by <small>(select in order from most important to least)</small></label>
       <% @sort_options.keys.each do |s| %>
          <label class="checkbox">
-         <input class="sort_by" type="checkbox" name="sort_by" value="<%= s %>" <% if @sort_by == s %> checked <% end %> />
+         <input class="sort_by" type="checkbox" name="sort_by" value="<%= s %>" />
             <%= @sort_options[s] %>
          </label>
       <% end %>
