@@ -7,9 +7,14 @@
       <label>Courses</label>
       <input class="span6" type="text" placeholder="Courses, separated by commas" name="courses" value="<%= @input_courses %>"/>
       <label>Allowed clash hours</label>
-      <input class="span4" type="text" placeholder="Maximum of 3" name="clash" value="<%= @input_clash %>"/>
-
-      <br />
+      <input class="span4" type="text" placeholder="Maximum of 3" name="clash" value="<%= @clash %>"/>
+      <label>Sort timetables by</label>
+      <% @sort_options.keys.each do |s| %>
+         <label class="radio">
+         <input type="radio" name="sort_by" value="<%= s %>" <% if @sort_by == s %> checked <% end %> />
+            <%= @sort_options[s] %>
+         </label>
+      <% end %>
       <input type="submit" value="Generate" class="btn" />
    </form>
 

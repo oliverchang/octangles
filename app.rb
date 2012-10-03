@@ -5,7 +5,10 @@ get '/' do
   @title = "Octangles"
   @timetables = []
   @input_courses = ''
-  @input_clash = ''
+  @clash = 0
+  @sort_by = ''
+  @sort_options = {'days' => 'Least days at uni',
+                   'hours' => 'Least hours at uni'}
   erb :index
 end
 
@@ -19,8 +22,12 @@ end
 post '/generate' do
   @title = "Octangles"
   @input_courses = params[:courses]
-  @input_clash = params[:clash]
+  @sort_options = {'days' => 'Least days at uni',
+                   'hours' => 'Least hours at uni'}
+  @sort_by = params[:sort_by]
+  @clash = params[:clash].to_i
   courses = params[:courses].split(',').map{|x| Course.new(x.strip)}
-  @timetables = Timetabler::generate(courses, :clash => params[:clash].to_i)
+  @timetables = Timetabler::generate(courses, :clash => @clash,
+                                              :sort_by => params[:sort_by])
   erb :index
 end

@@ -8,7 +8,7 @@ module Timetabler
     def to_html
       timetable = []
 
-      headings = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
+      days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
       result = "<table class=\"table table-bordered timetable\">\n"
       start = self.earliest_start_time
       finish = self.latest_end_time
@@ -28,7 +28,7 @@ module Timetabler
       end
 
       result += "<tr><th class=\"hour\">Hour</th>"
-      result += headings.map{|x| "<th>"+x+"</th>"}.join('') + "</tr>\n"
+      result += days.map{|x| "<th>"+x+"</th>"}.join('') + "</tr>\n"
 
       (start..finish).each do |h|
         result += "<tr>"
@@ -106,9 +106,44 @@ module Timetabler
     end
 
     def hours_at_uni
+      hours = 0
+      start_times = [24]*5
+      end_times = [0]*5
+
+      self.each do |a|
+        a.times.each do |t|
+          if t[1] < start_times[t[0]]
+            start_times[t[0]] = t[1]
+          end
+
+          if t[2] > end_times[t[0]]
+          end_times[t[0]] = t[2]
+          end
+        end
+      end
+
+      (0..4).each do |i|
+        if start_times[i] != 24
+          hours += end_times[i]-start_times[i]
+        end
+      end
+
+      return hours
     end
 
     def days_at_uni
+      days = 0
+      seen = {}
+      self.each do |a|
+        a.times.each do |t|
+          if not seen.has_key?(t[0]) 
+            seen[t[0]] = 1
+            days += 1
+          end
+        end
+      end
+
+      return days
     end
   end
 
@@ -131,6 +166,15 @@ module Timetabler
       puts ""
       puts t.to_html
       puts ""
+    end
+
+    if options[:sort_by]
+      case options[:sort_by]
+      when 'days' then timetables.sort!{|x,y| x.days_at_uni <=> 
+                                               y.days_at_uni}
+      when 'hours' then timetables.sort!{|x,y| x.hours_at_uni <=>
+                                                y.hours_at_uni} 
+      end
     end
   
     return timetables
