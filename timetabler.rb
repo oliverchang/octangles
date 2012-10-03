@@ -187,6 +187,7 @@ module Timetabler
     required.shuffle!
 
     options[:clash] ||= 0
+    options[:clash] = 3 if options[:clash] > 3
 
     @@num_generated = 0
     generateAux(required, 0, Timetable.new, options[:clash]) do |t|
