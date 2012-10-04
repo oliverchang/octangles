@@ -3,48 +3,42 @@
       <h1>Octangles</h1>
       <small>UNSW timetable generator for 2013 Semester 1</small>
    </div>
-   <form method="POST" action="/">
+   <form>
       <label>Courses</label>
-      <input class="span6" type="text" placeholder="Courses, separated by commas" name="courses" value="<%= @input_courses %>"/>
+      <input id="courses" type="text" class="span6" name="courses" placeholder="Courses, separated by commas" value="<%= @input_courses %>"/>
 
       <label>Allowed clash hours</label>
-      <input class="span4" type="text" placeholder="Maximum of 3" name="clash" value="<%= @clash %>"/>
+      <input id="clash" type="text" class="span4" name="clash" placeholder="Maximum of 3" value="<%= @clash %>"/>
 
       <label>Sort timetables by <small>(select in order from most important to least)</small></label>
       <% @sort_options.keys.each do |s| %>
          <label class="checkbox">
-         <input class="sort_by" type="checkbox" name="sort_by" value="<%= s %>" />
+         <input type="checkbox" class="sort_by" name="sort_by" value="<%= s %>" />
             <%= @sort_options[s] %>
          </label>
       <% end %>
 
-      <div class="input-append" id="sort_div">
-         <input id="sort_by_ordered" class="span5" type="text" name="sort_by_ordered" readonly="readonly"/>
-         <button id="sort_reset" class="btn btn-info" type="button">Reset</button> 
+      <div class="input-append" id="sort_div" hidden="hidden">
+         <input id="sort_by_ordered" type="text" class="span5" name="sort_by_ordered" readonly="readonly"/>
+         <button id="sort_reset" type="button" class="btn btn-info">Reset</button> 
       </div>
       
       <div>
          <label>Show only timetables with</label>
-         Course <input name="force_course" class="span2" type="text" placeholder="e.g. MATH1231" />
-         during <input name="force_course_time" type="text" placeholder="e.g. Mon 13-15" />
+         Course <input id="force_course" type="text" class="span2" name="force_course" placeholder="e.g. MATH1231" />
+         during <input id="force_course_time" type="text" name="force_course_time" placeholder="e.g. Mon 13-15" />
+      </div>
+   
+      <div>
+         <button id="generate" type="button" class="btn btn-primary" value="Generate">Generate</button>
       </div>
 
-
-      <div>
-         <input type="submit" value="Generate" class="btn btn-primary" />
+      <div id="spinner_div" class="spinner_div" hidden="hidden">
+         <img class="spinner" src="img/spinner.gif" />
       </div>
 
    </form>
-
-   <% if @timetables.size > 0 %>
-      <p><%= @timetables.size %> timetables generated.</p>
-   <% elsif @input_courses %>
-      <p>No valid timetables found.</p>
-   <% end %>
-
-   <% if @timetables %>
-      <% @timetables.each do |t| %>   
-         <%= t.to_html %>
-      <% end %>
-   <% end %>
+      
+   <div id="results">
+   </div>
 </div>

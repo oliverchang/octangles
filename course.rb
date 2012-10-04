@@ -21,6 +21,10 @@ class Activity
   def to_s 
     "#{@course} #{@name} #{@times.to_s}"
   end
+
+  def to_json(*a)
+    {"#{course} #{name}" => @times}.to_json(*a)
+  end
 end
 
 class Course 
