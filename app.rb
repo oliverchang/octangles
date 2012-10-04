@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'json'
 require './timetabler'
 
 configure do 
@@ -29,14 +30,18 @@ get '/' do
   erb :index
 end
 
-post '/' do
-  @title = "Octangles"
+post '/generate.json' do
+  content_type :json
+
   get_params
 
-  courses = @input_courses.split(',').map{|x| Course.new(x.strip)}
-  @timetables = Timetabler::generate(courses, :clash => @clash.to_i,
+  course_names = @input_courses.split(',').map{|x| x.strip.upcase}.uniq
+  courses = course_names.map{|x| Course.new(x)}
+
+  timetables = Timetabler::generate(courses, :clash => @clash.to_i,
                                               :sort_by => @sort_by_ordered,
                                               :force_course => [@force_course,
                                                                 @force_course_time])
-  erb :index
+
+  {:timetables => timetables, :courses => course_names}.to_json
 end

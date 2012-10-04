@@ -43,3 +43,8 @@ table.timetable {
   width: 8%;     
 }
 
+.spinner {
+  margin: 0 auto;
+  display: block;
+}
+
