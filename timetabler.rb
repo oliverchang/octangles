@@ -9,6 +9,9 @@ module Timetabler
     def to_html
       timetable = []
 
+      # List of all the courses 
+      courses = self.each.map{|a| a.course}.uniq.sort
+
       result = "<table class=\"table table-bordered timetable\">\n"
       start = self.earliest_start_time
       finish = self.latest_end_time
@@ -16,13 +19,12 @@ module Timetabler
       (start..finish).each do |h|
         timetable[h] = []
       end
-      
+
       self.each do |a|
         a.times.each do |t|
           (t[1]..(t[2]-1)).each do |h|
-            timetable[h][t[0]] ||= ""
-            timetable[h][t[0]] += "+ " if timetable[h][t[0]] != ""
-            timetable[h][t[0]] += "#{a.course} #{a.name} "
+            timetable[h][t[0]] ||= []
+            timetable[h][t[0]] << "#{a.course} #{a.name}"
           end
         end
       end
@@ -35,30 +37,32 @@ module Timetabler
         result += "<td class=\"hour\">" + "#{h}:00" + "</td>"
 
         (0..4).each do |d|
-          next if timetable[h][d] == ' '
+          next if timetable[h][d] == :skip
           rowspan = 1
-          
+
           (h+1..finish).each do |r|
             if timetable[h][d] != timetable[r][d]
               break
             end
 
-            timetable[r][d] = ' '
+            timetable[r][d] = :skip
             rowspan += 1
           end if timetable[h][d]
 
           # TODO make neater
 
-         if timetable[h][d] 
-           if timetable[h][d].include?(' + ')
-             cls = "clash"
-           else
-             cls = "class"
-           end
-         else
-           cls = ''
-         end
-          
+          if timetable[h][d] 
+            colour_index = courses.index(timetable[h][d][0].split(' ')[0]) + 1
+
+            if timetable[h][d].size > 1
+              cls = "clash"
+            else
+              cls = "class colour#{colour_index}"
+            end
+          else
+            cls = ''
+          end
+
           if rowspan > 1
             result += "<td rowspan=\"#{rowspan}\" class=\"#{cls}\">"
           else
@@ -66,15 +70,15 @@ module Timetabler
           end
 
           if timetable[h][d]
-            result += timetable[h][d]
+            result += timetable[h][d].join(' + ')
           end
 
           result += "</td>"
         end
-    
+
         result += "</tr>\n"
       end
-      
+
       result += "</table>\n"
     end
 
@@ -162,7 +166,7 @@ module Timetabler
           earliest[t[0]] = [earliest[t[0]], t[1]].min
         end
       end
-    
+
       earliest.each do |t|
         if t < 24
           sleep_in += t
@@ -210,7 +214,7 @@ module Timetabler
     generateAux(required, 0, Timetable.new, options[:clash]) do |t|
       timetables << t.clone
     end
-    
+
     # Look for timetables with a given course in a given timeslot
     force_course = options[:force_course]
     if force_course[0] && force_course[1]
@@ -227,11 +231,11 @@ module Timetabler
         end
       end
     end
-  
+
     if options[:sort_by]
       options[:sort_by].split(', ').reverse.each do |s|
         case s
-        # force stable sorting
+          # force stable sorting
         when 'days' then i = 0; timetables.sort_by!{|x| [x.days_at_uni, i+=1]}
         when 'hours' then i = 0; timetables.sort_by!{|x| [x.hours_at_uni, i+=1]}
         when 'start_time' then i = 0; timetables.sort_by!{|x| [-x.earliest_start_time, i+=1]}
@@ -240,7 +244,7 @@ module Timetabler
         end
       end
     end
-  
+
     return timetables
   end
 

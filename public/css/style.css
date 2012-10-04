@@ -9,8 +9,32 @@ table.timetable {
   text-align: center;
 }
 
+.timetable td.class.colour1 {
+  background-color:#5099CC;
+}
+
+.timetable td.class.colour2 {
+  background-color:#9950CC;
+}
+
+.timetable td.class.colour3 {
+  background-color:#509988;
+}
+
+.timetable td.class.colour4 {
+  background-color:#DDAA60;
+}
+
+.timetable td.class.colour5 {
+  background-color:#3366CC;
+}
+
+.timetable td.class.colour6 {
+  background-color:#409944;
+}
+
 .timetable td.clash {
-  background-color:#CC9966;
+  background-color:#DD5566;
   color: #eeeeee;
   text-align: center;
 }
