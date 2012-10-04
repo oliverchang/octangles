@@ -16,6 +16,8 @@ helpers do
     @clash = params[:clash]
     @sort_by = params[:sort_by]
     @sort_by_ordered = params[:sort_by_ordered]
+    @force_course = params[:force_course]
+    @force_course_time = params[:force_course_time]
     @sort_options = settings.sort_options
   end
 end
@@ -33,6 +35,8 @@ post '/' do
 
   courses = @input_courses.split(',').map{|x| Course.new(x.strip)}
   @timetables = Timetabler::generate(courses, :clash => @clash.to_i,
-                                              :sort_by => @sort_by_ordered)
+                                              :sort_by => @sort_by_ordered,
+                                              :force_course => [@force_course,
+                                                                @force_course_time])
   erb :index
 end

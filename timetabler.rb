@@ -2,13 +2,13 @@ require './course'
 
 module Timetabler
   MAX_TIMETABLES = 1500
+  DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
 
   # A timetable is an array of Activities
   class Timetable < Array
     def to_html
       timetable = []
 
-      days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri']
       result = "<table class=\"table table-bordered timetable\">\n"
       start = self.earliest_start_time
       finish = self.latest_end_time
@@ -28,7 +28,7 @@ module Timetabler
       end
 
       result += "<tr><th class=\"hour\">Hour</th>"
-      result += days.map{|x| "<th>"+x+"</th>"}.join('') + "</tr>\n"
+      result += DAYS.map{|x| "<th>"+x+"</th>"}.join('') + "</tr>\n"
 
       (start..finish).each do |h|
         result += "<tr>"
@@ -138,18 +138,18 @@ module Timetabler
 
     def days_at_uni
       return @days_at_uni if @days_at_uni
-      days = 0
+      at_uni = 0
       seen = {}
       self.each do |a|
         a.times.each do |t|
           if not seen.has_key?(t[0]) 
             seen[t[0]] = 1
-            days += 1
+            at_uni += 1
           end
         end
       end
 
-      return (@days_at_uni = days)
+      return (@days_at_uni = at_uni)
     end
 
     def sleep_in_time
@@ -170,6 +170,20 @@ module Timetabler
       end
 
       return (@sleep_in_time = sleep_in)
+    end
+
+    def has_course(name, day, start, finish)
+      has_class = [false]*finish
+
+      self.each do |a|
+        a.times.each do |t|
+          if t[0] == day
+            has_class[t[1]..t[2]] = [true]*(t[2]-t[1])
+          end
+        end if a.course == name
+      end
+
+      return has_class[start..finish].uniq == [true]
     end
   end
 
@@ -196,7 +210,24 @@ module Timetabler
     generateAux(required, 0, Timetable.new, options[:clash]) do |t|
       timetables << t.clone
     end
+    
+    # Look for timetables with a given course in a given timeslot
+    force_course = options[:force_course]
+    if force_course[0] && force_course[1]
+      if force_course[1] =~ /^(\w+)\s+(\d+)\s*-\s*(\d+)\s*$/
+        course = force_course[0].upcase
+        day = DAYS.index($1)
+        start = $2.to_i
+        finish = $3.to_i
 
+
+        if start < finish && start >= 0 && finish < 24 &&
+          (0..4).include?(day) 
+          timetables.select!{|t| t.has_course(course, day, start, finish)}
+        end
+      end
+    end
+  
     if options[:sort_by]
       options[:sort_by].split(', ').reverse.each do |s|
         case s
