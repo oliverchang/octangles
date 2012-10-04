@@ -177,17 +177,17 @@ module Timetabler
     end
 
     def has_course(name, day, start, finish)
-      has_class = [false]*finish
+      has_class = [false]*24
 
       self.each do |a|
         a.times.each do |t|
           if t[0] == day
-            has_class[t[1]..t[2]] = [true]*(t[2]-t[1])
+            has_class[t[1]..t[2]-1] = [true]*(t[2]-t[1])
           end
         end if a.course == name
       end
 
-      return has_class[start..finish].uniq == [true]
+      return has_class[start..finish-1].uniq == [true]
     end
   end
 
