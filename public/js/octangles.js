@@ -139,7 +139,7 @@ function fuckIE() {
             $(this).focus(function() {
                if ($(this).val() == $(this).attr("placeholder")) {
                   $(this).val("");
-                  $(this).css('color', 'black');
+                  $(this).css('color', '');
                }
             });
          }
