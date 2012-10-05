@@ -35,6 +35,7 @@ $(document).ready(function() {
 });
 
 function resetForm() {
+   hideSpinner();
    resetSortDiv();
 
    $('#input_form :input').each(function() {
