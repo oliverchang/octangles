@@ -66,7 +66,7 @@ class Course
           # Grab the class times
           info[6].gsub(/\(.*?\)/, '').split(', ').each do |t|
             # Times are in the format "Mon 09:00 - 10:00"
-            t =~ /^(\w+)\s+(\d{2}):\d+\s+-\s+(\d{2}):.*/
+            t =~ /^\s*(\w+)\s+(\d{2}):\d+\s+-\s+(\d{2}):.*/
             activity.add_time day_to_index($1), $2.to_i, $3.to_i
           end
 
