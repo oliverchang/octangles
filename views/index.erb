@@ -28,12 +28,12 @@
                <label>Show only timetables with</label>
                <div id="force_div">
                   <div id="force_copy" hidden="hidden">
-                     Course <input type="text" class="force_course span2" name="force_course" placeholder="e.g. MATH1231" />
-                     during <input type="text" class="force_course_time span2" name="force_course_time" placeholder="e.g. Mon 13-15" /><br />
+                     Course <input type="text" class="force_course span2" placeholder="e.g. MATH1231" />
+                     during <input type="text" class="force_course_time span2" placeholder="e.g. Mon 13-15" /><br />
                   </div>
 
-                  Course <input type="text" class="force_course span2" name="force_course" placeholder="e.g. MATH1231" />
-                  during <input type="text" class="force_course_time span2" name="force_course_time" placeholder="e.g. Mon 13-15" /><br />
+                  Course <input type="text" class="force_course span2" placeholder="e.g. MATH1231" />
+                  during <input type="text" class="force_course_time span2" placeholder="e.g. Mon 13-15" /><br />
                </div>
                <button id="add_force" type="button" class="btn btn-small">Add more</button>
             </div>
@@ -41,7 +41,7 @@
                <div class="span3">
                   <div class="well well-small">
                      <label>Allowed clash hours</label>
-                     <input id="clash" type="text" class="span2" name="clash" placeholder="Maximum of 3" />
+                     <input id="clash" type="text" class="span2" placeholder="Maximum of 3" />
                   </div>
                </div>
 
@@ -50,13 +50,13 @@
                      <label>Sort timetables by <small>(select in order from most important to least)</small></label>
                      <% @sort_options.keys.each do |s| %>
                         <label class="checkbox">
-                           <input type="checkbox" class="sort_by" name="sort_by" value="<%= s %>" />
+                           <input type="checkbox" class="sort_by" value="<%= s %>" />
                            <%= @sort_options[s] %>
                         </label>
                      <% end %>
 
                      <div class="input-append" id="sort_div" hidden="hidden">
-                        <input id="sort_by_ordered" type="text" class="span4" name="sort_by_ordered" readonly="readonly"/>
+                        <input id="sort_by_ordered" type="text" class="span4" readonly="readonly"/>
                         <button id="sort_reset" type="button" class="btn btn-info">Reset</button> 
                      </div>
                   </div>
@@ -81,4 +81,10 @@
 
    <div id="results">
    </div>
+
+   <hr />
+
+   <footer class="pull-right">
+      <p><small>Written by <a href="http://www.cse.unsw.edu.au/~oliverc">Oliver Chang</a></small></p>
+   </footer>
 </div>

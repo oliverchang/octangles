@@ -2,7 +2,6 @@ $(document).ready(function() {
    resetForm(); 
 
    $('#add_course').click(function() {
-      var oldHtml = $('#course_div').html();
       $('#course_div').append($('#course_copy').clone().removeAttr("id").show());
    });
 
@@ -112,6 +111,7 @@ function generateTimetables() {
          }
 
          $('#results').html($('#results').html() + htmlTables);
+         $("html, body").animate({scrollTop: $('#results').offset().top}, 900);
       },
 
       dataType: "json"
