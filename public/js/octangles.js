@@ -33,28 +33,8 @@ $(document).ready(function() {
       generateTimetables();
    });
 
-   // fuck you IE
-   if(!Modernizr.input.placeholder){
-      $(':input[type="text"]').each(function() {
-         if ($(this).attr("placeholder") != "") {
-            $(this).val($(this).attr("placeholder"));
-            $(this).css('color', '#999999');
-
-            $(this).blur(function() {
-               if ($(this).val() == "") {
-                  $(this).val($(this).attr("placeholder"));
-                  $(this).css('color', '#999999');
-               }
-            });
-            
-            $(this).focus(function() {
-               if ($(this).val() == $(this).attr("placeholder")) {
-                  $(this).val("");
-                  $(this).css('color', 'black');
-               }
-            });
-         }
-      })
+   if (!Modernizr.input.placeholder){
+      fuckIE();
    }
 });
 
@@ -62,13 +42,12 @@ function resetForm() {
    hideSpinner();
    resetSortDiv();
 
-   $('#input_form :input').each(function() {
-      if (this.type == "text") {
-         $(this).val('');
-      };
+   $('#input_form input[type="text"]').each(function() {
+      $(this).val('');
    });
 
    $('#results').html('');
+   fuckIE();
 }
 
 function resetSortDiv() {
@@ -140,5 +119,29 @@ function generateTimetables() {
       },
 
       dataType: "json"
+   });
+}
+
+function fuckIE() {
+   $('input[type="text"]').each(function() {
+      var placeholder = $(this).attr("placeholder");
+      if (typeof(placeholder) != 'undefined' && placeholder != "") {
+         $(this).val($(this).attr("placeholder"));
+         $(this).css('color', '#999999');
+
+         $(this).blur(function() {
+            if ($(this).val() == "") {
+               $(this).val($(this).attr("placeholder"));
+               $(this).css('color', '#999999');
+            }
+         });
+         
+         $(this).focus(function() {
+            if ($(this).val() == $(this).attr("placeholder")) {
+               $(this).val("");
+               $(this).css('color', 'black');
+            }
+         });
+      }
    });
 }
