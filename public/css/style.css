@@ -48,6 +48,15 @@ table.timetable {
   display: block;
 }
 
+#course_copy {
+   display: none;
+}
+
+#force_copy {
+   display: none;
+}
+
 footer {
    color: #aaa;
 }
+
