@@ -136,18 +136,18 @@ module Timetabler
     end
 
     # Look for timetables with a given course in a given timeslot
-    force_course = options[:force_course]
-    if force_course[0] && force_course[1]
-      if force_course[1] =~ /^(\w+)\s+(\d+)\s*-\s*(\d+)\s*$/
-        course = force_course[0].upcase
-        day = DAYS.index($1)
-        start = $2.to_i
-        finish = $3.to_i
+    options[:force_courses].each do |force_course|
+      if force_course[0] && force_course[1]
+        if force_course[1] =~ /^(\w+)\s+(\d+)\s*-\s*(\d+)\s*$/
+          course = force_course[0].upcase
+          day = DAYS.index($1.capitalize)
+          start = $2.to_i
+          finish = $3.to_i
 
-
-        if start < finish && start >= 0 && finish < 24 &&
-          (0..4).include?(day) 
-          timetables.select!{|t| t.has_course(course, day, start, finish)}
+          if start < finish && start >= 0 && finish < 24 &&
+            (0..4).include?(day) 
+            timetables.select!{|t| t.has_course(course, day, start, finish)}
+          end
         end
       end
     end

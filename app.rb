@@ -17,8 +17,8 @@ helpers do
     @clash = params[:clash]
     @sort_by = params[:sort_by]
     @sort_by_ordered = params[:sort_by_ordered]
-    @force_course = params[:force_course]
-    @force_course_time = params[:force_course_time]
+    @force_courses = params[:force_courses]
+    @force_course_times = params[:force_course_times]
     @sort_options = settings.sort_options
   end
 end
@@ -32,16 +32,18 @@ end
 
 post '/generate.json' do
   content_type :json
-
   get_params
 
-  course_names = @input_courses.split(',').map{|x| x.strip.upcase}.uniq
+  course_names = @input_courses.split(',').map{|x| x.strip.upcase}.select{|x| x != '' }.uniq
   courses = course_names.map{|x| Course.new(x)}
+
+  force_courses = @force_courses.split(',');
+  force_course_times = @force_course_times.split(',');
 
   timetables = Timetabler::generate(courses, :clash => @clash.to_i,
                                               :sort_by => @sort_by_ordered,
-                                              :force_course => [@force_course,
-                                                                @force_course_time])
+                                              :force_courses => 
+                                                force_courses.zip(force_course_times))
 
   {:timetables => timetables, :courses => course_names}.to_json
 end

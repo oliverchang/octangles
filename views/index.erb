@@ -1,44 +1,84 @@
 <div class="container">
    <div class="page-header">
-      <h1>Octangles</h1>
+      <h1>Octangles <small>beta</small></h1>
       <small>UNSW timetable generator for 2013 Semester 1</small>
    </div>
-   <form>
-      <label>Courses</label>
-      <input id="courses" type="text" class="span6" name="courses" placeholder="Courses, separated by commas" value="<%= @input_courses %>"/>
+   <form id="input_form">
+      <div class="row">
+         <div class="span4">
+            <legend>Courses</legend>
+            <div class="well">
+               <div id="course_div">
+                  <div id="course_copy" hidden="hidden">
+                     <input type="text" class="course span3" /><br />
+                  </div>
 
-      <label>Allowed clash hours</label>
-      <input id="clash" type="text" class="span4" name="clash" placeholder="Maximum of 3" value="<%= @clash %>"/>
+                  <input type="text" class="course span3" placeholder="e.g. MATS1101" /><br />
+                  <input  type="text" class="course span3" /><br />
+                  <input  type="text" class="course span3" /><br />
+                  <input  type="text" class="course span3" /><br />
+               </div>
+               <button id="add_course" type="button" class="btn btn-small">Add more</button>
+            </div>
+         </div>
 
-      <label>Sort timetables by <small>(select in order from most important to least)</small></label>
-      <% @sort_options.keys.each do |s| %>
-         <label class="checkbox">
-         <input type="checkbox" class="sort_by" name="sort_by" value="<%= s %>" />
-            <%= @sort_options[s] %>
-         </label>
-      <% end %>
+         <div class="span8">
+            <legend>Optional settings</legend>
+            <div class="well well-small">
+               <label>Show only timetables with</label>
+               <div id="force_div">
+                  <div id="force_copy" hidden="hidden">
+                     Course <input type="text" class="force_course span2" name="force_course" placeholder="e.g. MATH1231" />
+                     during <input type="text" class="force_course_time span2" name="force_course_time" placeholder="e.g. Mon 13-15" /><br />
+                  </div>
 
-      <div class="input-append" id="sort_div" hidden="hidden">
-         <input id="sort_by_ordered" type="text" class="span5" name="sort_by_ordered" readonly="readonly"/>
-         <button id="sort_reset" type="button" class="btn btn-info">Reset</button> 
+                  Course <input type="text" class="force_course span2" name="force_course" placeholder="e.g. MATH1231" />
+                  during <input type="text" class="force_course_time span2" name="force_course_time" placeholder="e.g. Mon 13-15" /><br />
+               </div>
+               <button id="add_force" type="button" class="btn btn-small">Add more</button>
+            </div>
+            <div class="row">
+               <div class="span3">
+                  <div class="well well-small">
+                     <label>Allowed clash hours</label>
+                     <input id="clash" type="text" class="span2" name="clash" placeholder="Maximum of 3" />
+                  </div>
+               </div>
+
+               <div class="span5">
+                  <div class="well well-small">
+                     <label>Sort timetables by <small>(select in order from most important to least)</small></label>
+                     <% @sort_options.keys.each do |s| %>
+                        <label class="checkbox">
+                           <input type="checkbox" class="sort_by" name="sort_by" value="<%= s %>" />
+                           <%= @sort_options[s] %>
+                        </label>
+                     <% end %>
+
+                     <div class="input-append" id="sort_div" hidden="hidden">
+                        <input id="sort_by_ordered" type="text" class="span4" name="sort_by_ordered" readonly="readonly"/>
+                        <button id="sort_reset" type="button" class="btn btn-info">Reset</button> 
+                     </div>
+                  </div>
+               </div>
+
+            </div>
+
+         </div>
       </div>
-      
-      <div>
-         <label>Show only timetables with</label>
-         Course <input id="force_course" type="text" class="span2" name="force_course" placeholder="e.g. MATH1231" />
-         during <input id="force_course_time" type="text" name="force_course_time" placeholder="e.g. Mon 13-15" />
-      </div>
-   
-      <div>
-         <button id="generate" type="button" class="btn btn-primary" value="Generate">Generate</button>
+
+      <div class="row">
+         <div class="span12">
+            <button id="generate" type="button" class="btn btn-primary" value="Generate">Generate</button>
+            <button id="reset" type="button" class="btn" value="Generate">Reset</button>
+         </div>
       </div>
 
-      <div id="spinner_div" class="spinner_div" hidden="hidden">
+      <div id="spinner_div" class="spinner_div row" hidden="hidden">
          <img class="spinner" src="img/spinner.gif" />
       </div>
-
    </form>
-      
+
    <div id="results">
    </div>
 </div>
