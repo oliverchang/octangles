@@ -32,6 +32,30 @@ $(document).ready(function() {
    $('#generate').click(function() {
       generateTimetables();
    });
+
+   // fuck you IE
+   if(!Modernizr.input.placeholder){
+      $(':input[type="text"]').each(function() {
+         if ($(this).attr("placeholder") != "") {
+            $(this).val($(this).attr("placeholder"));
+            $(this).css('color', '#999999');
+
+            $(this).blur(function() {
+               if ($(this).val() == "") {
+                  $(this).val($(this).attr("placeholder"));
+                  $(this).css('color', '#999999');
+               }
+            });
+            
+            $(this).focus(function() {
+               if ($(this).val() == $(this).attr("placeholder")) {
+                  $(this).val("");
+                  $(this).css('color', 'black');
+               }
+            });
+         }
+      })
+   }
 });
 
 function resetForm() {

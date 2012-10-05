@@ -7,8 +7,7 @@ table.timetable {
   background-color:#5099CC;
   color: #eeeeee;
   text-align: center;
-}
-
+} 
 .timetable td.class.colour1 {
   background-color:#5099CC;
 }
@@ -57,6 +56,6 @@ table.timetable {
 }
 
 footer {
-   color: #aaa;
+   color: #aaaaaa;
 }
 
