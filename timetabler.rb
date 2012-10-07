@@ -203,7 +203,11 @@ module Timetabler
           else
             return false, 0
           end
-        end
+        # allow clashes within the same course only if 
+        # they are different activities
+        # (usually this is because different classes
+        #  run in different weeks)
+        end if activity.course != a.course
       end
     end
 

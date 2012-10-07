@@ -74,7 +74,9 @@ function timetableToHtml(courses, t) {
 
          var cls = "";
          if (table[h][d].length >= 1) {
-            if (table[h][d].length > 1) {
+            if (table[h][d].length > 1 && courseNum(table[h][d]) > 1) {
+               // the courseNum check is to check for "clashes" between
+               // the same course - these shouldn't actually be clashes
                cls = "clash";
             } else {
                cls = "class colour" + (courses.indexOf(table[h][d][0].split(' ')[0]) + 1).toString();
@@ -106,4 +108,21 @@ function arrayEquals(a,b) {
    }
 
    return true;
+}
+
+// returns the number of different courses in 
+// timeslot t
+function courseNum(t) {
+   var num = 0;
+   seen = {};
+
+   for (var i = 0; i < t.length; i++) {
+      var course_name = t[i].split(' ')[0];
+      if (!(course_name in seen)) {
+         num++;
+         seen[course_name] = 1;
+      }
+   }
+
+   return num;
 }
