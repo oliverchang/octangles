@@ -72,7 +72,6 @@ class Course
             finish = $4.to_i
 
             if $3.to_i != 0 or $5.to_i != 0 
-              start -= 1 if $3.to_i != 0
               finish += 1 if $5.to_i != 0
               # does not handle half hour starts/ends etc
               warnings << NON_HOUR_START if not warnings.include?(NON_HOUR_START)
