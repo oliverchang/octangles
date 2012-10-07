@@ -35,8 +35,20 @@ class Octangles < Sinatra::Base
      content_type :json
      get_params
 
+     courses = []
+     warnings = []
+
      course_names = @input_courses.split(',').map{|x| x.strip.upcase}.select{|x| x != '' }.uniq
-     courses = course_names.map{|x| Course.new(x)}
+
+     course_names.each do |c|
+       new_course = Course.new(c, warnings)
+
+       if new_course.activities != {}
+         courses << new_course
+       else
+         warnings << "No classes found for #{c}"
+       end
+     end
 
      force_courses = @force_courses.split(',');
      force_course_times = @force_course_times.split(',');
@@ -46,6 +58,6 @@ class Octangles < Sinatra::Base
                                                  :force_courses => 
                                                    force_courses.zip(force_course_times))
 
-     {:timetables => timetables, :courses => course_names}.to_json
+     {:timetables => timetables, :courses => course_names, :warnings => warnings.uniq}.to_json
    end
 end

@@ -33,18 +33,19 @@ class Course
 
   TIMETABLE_URI = 'http://www.timetable.unsw.edu.au/current/'
   TEACHING_PERIOD = 'Teaching Period One'
+  NON_HOUR_START = "Octangles currently does not take into account classes that don't start on the hour. You may get incorrect timetables."
 
-  def initialize(name)
+  def initialize(name, warnings=[])
     @name = name.upcase
 
     # activities is a Hash where the keys 
     # are the class types (e.g. Lecture) and the values
     # are the different timeslots
-    @activities = get_activities
+    @activities = get_activities warnings
   end
   
   private 
-  def get_activities
+  def get_activities(warnings=[])
     activities = {}
     begin
       doc = Nokogiri::HTML(open(TIMETABLE_URI+@name+'.html')) 
@@ -66,8 +67,13 @@ class Course
           # Grab the class times
           info[6].gsub(/\(.*?\)/, '').split(', ').each do |t|
             # Times are in the format "Mon 09:00 - 10:00"
-            t =~ /^\s*(\w+)\s+(\d{2}):\d+\s+-\s+(\d{2}):.*/
-            activity.add_time day_to_index($1), $2.to_i, $3.to_i
+            t =~ /^\s*(\w+)\s+(\d{2}):(\d{2})\s+-\s+(\d{2}):(\d{2}).*/
+            activity.add_time day_to_index($1), $2.to_i, $4.to_i
+
+            if not warnings.include?(NON_HOUR_START)
+              # does not handle half hour starts/ends etc
+              warnings << NON_HOUR_START if $3.to_i != 0 or $5.to_i != 0
+            end
           end
 
           activities[activity.name] ||= []

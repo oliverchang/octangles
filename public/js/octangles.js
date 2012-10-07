@@ -102,10 +102,14 @@ function generateTimetables() {
          hideSpinner();
 
          if (results.timetables.length > 0) {
-            $('#results').html('<p>' + results.timetables.length.toString() + 
-                                       ' timetable(s) generated.</p>');
+            $('#results').append($('<p />').html(results.timetables.length.toString() + 
+                                                 ' timetable(s) generated.'));
          } else {
-            $('#results').html('<p>No valid timetables found.</p>');
+            $('#results').append($('<p />').html('No valid timetables found.'));
+         }
+
+         for (var i = 0; i < results.warnings.length; i++) {
+            $('#results').append($('<div />', {class: 'alert'}).html(results.warnings[i]));
          }
 
          var htmlTables = "";
