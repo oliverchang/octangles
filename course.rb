@@ -35,17 +35,17 @@ class Course
   TEACHING_PERIOD = 'Teaching Period One'
   NON_HOUR_START = "Octangles currently does not take into account classes that don't start on the hour. You may get suboptimal timetables as these times are rounded."
 
-  def initialize(name, warnings=[])
+  def initialize(name, warnings=[], settings={})
     @name = name.upcase
 
     # activities is a Hash where the keys 
     # are the class types (e.g. Lecture) and the values
     # are the different timeslots
-    @activities = get_activities warnings
+    @activities = get_activities warnings, settings
   end
   
   private 
-  def get_activities(warnings=[])
+  def get_activities(warnings=[], settings={})
     activities = {}
     begin
       doc = Nokogiri::HTML(open(TIMETABLE_URI+@name+'.html')) 
@@ -60,6 +60,12 @@ class Course
           info = row.css('td.data').map{|x| x.content}
 
           activity = Activity.new(@name, info[0])
+          status = info[4]
+
+          if status != 'Open' and not settings[:include_closed]
+            # Skip if closed
+            next
+          end
 
           # Some class times are stored on multiple lines
           info[6].gsub!(/\n/, ' ')

@@ -20,6 +20,7 @@ class Octangles < Sinatra::Base
        @sort_by_ordered = params[:sort_by_ordered]
        @force_courses = params[:force_courses]
        @force_course_times = params[:force_course_times]
+       @include_closed = params[:include_closed]
        @sort_options = settings.sort_options
      end
    end
@@ -41,7 +42,8 @@ class Octangles < Sinatra::Base
      course_names = @input_courses.split(',').map{|x| x.strip.upcase}.select{|x| x != '' }.uniq
 
      course_names.each do |c|
-       new_course = Course.new(c, warnings)
+       new_course = Course.new(c, warnings, :include_closed => 
+                                            @include_closed)
 
        if new_course.activities != {}
          courses << new_course

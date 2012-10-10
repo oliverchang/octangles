@@ -95,7 +95,8 @@ function generateTimetables() {
          clash: $('#clash').val(),
          sort_by_ordered: $('#sort_by_ordered').val(),
          force_courses: force_courses,
-         force_course_times: force_course_times
+         force_course_times: force_course_times,
+         include_closed: $('#include_closed').is(':checked')
       },
 
       success: function(results) {
