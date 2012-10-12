@@ -1,8 +1,10 @@
 $(document).ready(function() {
+   
    resetForm(); 
 
    $('#add_course').click(function() {
       $('#course_div').append($('#course_copy').clone().removeAttr("id").show());
+      initTypeahead();
    });
 
    $('#add_force').click(function() {
@@ -34,6 +36,7 @@ $(document).ready(function() {
       generateTimetables();
    });
 
+   initTypeahead();
    fuckIE();
 });
 
@@ -123,6 +126,17 @@ function generateTimetables() {
       },
 
       dataType: "json"
+   });
+}
+
+function initTypeahead() {
+   $('.course').typeahead({
+      source: courses,
+      items: 6,
+      minLength: 2,
+      highlighter: function(item) {
+         return "<li data-value=\"" + item + "\">" + item + " - " + course_names[courses.indexOf(item)] + "</li>";
+      }
    });
 }
 
