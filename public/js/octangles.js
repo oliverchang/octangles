@@ -113,7 +113,7 @@ function generateTimetables() {
          }
 
          for (var i = 0; i < results.warnings.length; i++) {
-            $('#results').append($('<div />', {class: 'alert'}).html(results.warnings[i]));
+            $('#results').append($('<div />', {'class': 'alert'}).html(results.warnings[i]));
          }
 
          var htmlTables = "";
