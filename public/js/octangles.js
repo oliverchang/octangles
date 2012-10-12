@@ -135,7 +135,7 @@ function initTypeahead() {
       items: 6,
       minLength: 2,
       highlighter: function(item) {
-         return "<li data-value=\"" + item + "\">" + item + " - " + course_names[courses.indexOf(item)] + "</li>";
+         return "<li data-value=\"" + item + "\">" + item + " - " + course_names[binarySearch(courses,item,0,courses.length-1)] + "</li>";
       }
    });
 }
@@ -165,3 +165,20 @@ function fuckIE() {
       });
    }
 }
+
+function binarySearch(arr, val, start, end) {
+   while (start <= end) {
+      var middle = (start+end) >> 1;
+    
+      if (arr[middle] < val) {
+         start = middle + 1;
+      } else if (arr[middle] > val) {
+         end = middle - 1;
+      } else {
+         return middle;
+      }   
+   }   
+
+   return -1; 
+}
+
