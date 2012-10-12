@@ -7,7 +7,7 @@ module Timetabler
   # A timetable is an array of Activities
   class Timetable < Array
     def earliest_start_time
-      return @earliest_start_time if @earlist_start_time
+      return @earliest_start_time if @earliest_start_time
 
       earliest = 24
       self.each do |a|
@@ -16,7 +16,7 @@ module Timetabler
         end
       end
 
-      return (@earlest_start_time = earliest)
+      return (@earliest_start_time = earliest)
     end
 
     def latest_end_time
