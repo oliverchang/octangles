@@ -76,6 +76,24 @@ module Timetabler
       return (@days_at_uni = at_uni)
     end
 
+    def end_time_earliness
+      return @end_time_earliness if @end_time_earliness
+      time = 0
+
+      latest = [0]*5
+      self.each do |a|
+        a.times.each do |t|
+          latest[t[0]] = [latest[t[0]], t[2]].max
+        end
+      end
+
+      latest.each do |t|
+        time += (24-t) if t > 0
+      end
+
+      return (@end_time_earliness = time)
+    end
+
     def sleep_in_time
       return @sleep_in_time if @sleep_in_time
       sleep_in = 0
@@ -88,9 +106,7 @@ module Timetabler
       end
 
       earliest.each do |t|
-        if t < 24
-          sleep_in += t
-        end
+        sleep_in += t if t < 24
       end
 
       return (@sleep_in_time = sleep_in)
@@ -158,8 +174,7 @@ module Timetabler
           # force stable sorting
         when 'days' then i = 0; timetables.sort_by!{|x| [x.days_at_uni, i+=1]}
         when 'hours' then i = 0; timetables.sort_by!{|x| [x.hours_at_uni, i+=1]}
-        when 'start_time' then i = 0; timetables.sort_by!{|x| [-x.earliest_start_time, i+=1]}
-        when 'end_time' then i = 0; timetables.sort_by!{|x| [x.latest_end_time, i+=1]}
+        when 'end_time' then i = 0; timetables.sort_by!{|x| [-x.end_time_earliness, i+=1]}
         when 'sleep_in_time' then i = 0; timetables.sort_by!{|x| [-x.sleep_in_time, i+=1]}
         end
       end
