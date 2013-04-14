@@ -32,7 +32,7 @@ class Course
   attr_reader :activities
 
   TIMETABLE_URI = 'http://www.timetable.unsw.edu.au/current/'
-  TEACHING_PERIOD = 'Teaching Period One'
+  TEACHING_PERIOD = 'Teaching Period Two'
   NON_HOUR_START = "Octangles currently does not take into account classes that don't start on the hour. You may get suboptimal timetables as these times are rounded."
 
   def initialize(name, warnings=[], settings={})
