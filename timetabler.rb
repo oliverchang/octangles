@@ -112,18 +112,48 @@ module Timetabler
       return (@sleep_in_time = sleep_in)
     end
 
+		def hours_sd
+			return @hours_sd  if @hours_sd
+
+			hours = [0]*5
+
+      # find the start/end times for each day
+      self.each do |a|
+        a.times.each do |t|
+					hours[t[0]] += t[2]-t[1]
+        end
+      end
+
+			mean = hours.reduce(:+) / hours.size
+			hours.each_with_index do |h, i|
+				hours[i] = (h - mean)**2
+			end
+		
+      return (@hours_sd = Math.sqrt(hours.reduce(:+) / hours.size))
+		end
+
     def has_course(name, day, start, finish)
       has_class = [false]*24
 
-      self.each do |a|
-        a.times.each do |t|
-          if t[0] == day
-            has_class[t[1]..t[2]-1] = [true]*(t[2]-t[1])
-          end
-        end if a.course == name
-      end
-
-      return has_class[start..finish-1].uniq == [true]
+			if name != 'NOTHING'
+				self.each do |a|
+					a.times.each do |t|
+						if t[0] == day
+							has_class[t[1]..t[2]-1] = [true]*(t[2]-t[1])
+						end
+					end if a.course == name
+				end
+				return has_class[start..finish-1].uniq == [true]
+			else
+				self.each do |a|
+					a.times.each do |t|
+						if t[0] == day
+							has_class[t[1]..t[2]-1] = [true]*(t[2]-t[1])
+						end
+					end 
+				end
+				return has_class[start..finish-1].uniq == [false]
+			end
     end
   end
 
@@ -176,6 +206,7 @@ module Timetabler
         when 'hours' then i = 0; timetables.sort_by!{|x| [x.hours_at_uni, i+=1]}
         when 'end_time' then i = 0; timetables.sort_by!{|x| [-x.end_time_earliness, i+=1]}
         when 'sleep_in_time' then i = 0; timetables.sort_by!{|x| [-x.sleep_in_time, i+=1]}
+        when 'hours_sd' then i = 0; timetables.sort_by!{|x| [x.hours_sd, i+=1]}
         end
       end
     end

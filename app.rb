@@ -7,7 +7,8 @@ class Octangles < Sinatra::Base
      set :sort_options, {'days' => 'Least days at uni',
                          'hours' => 'Least hours at uni',
                          'sleep_in_time' => 'Sleep in time',
-                         'end_time' => 'Earlier end times'}
+                         'end_time' => 'Earlier end times',
+                         'hours_sd' => 'Minimise differences between hours each day'}
    end
 
    helpers do
